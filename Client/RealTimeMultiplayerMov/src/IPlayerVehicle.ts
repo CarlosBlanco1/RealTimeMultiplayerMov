@@ -1,4 +1,4 @@
-interface PlayerVehicle {
+export default interface IPlayerVehicle {
     id : Number,
     xPosition : Number,
     yPosition : Number,
