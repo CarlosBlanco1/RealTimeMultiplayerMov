@@ -6,6 +6,7 @@ export default function Vehicle() {
   const [viewBox, setViewBox] = useState(0);
   const [xPosition, setXPostion] = useState(0);
   const [yPosition, setYPosition] = useState(0);
+  //Get coordinates from the context
   
   return (
     <div
@@ -19,6 +20,7 @@ export default function Vehicle() {
         left: `${yPosition}px`,
       }}
     >
+      
       <CarIcon />
     </div>
   );
