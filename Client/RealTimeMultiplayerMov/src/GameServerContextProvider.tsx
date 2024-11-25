@@ -11,23 +11,22 @@ export default function GameServerContextProvider({ children }: { children: Reac
       xPosition: 0,
       yPosition: 0,
       Angle: 0,
-      isMovingForward: true,
+      isMovingForward: false,
+      isMovingBackward: false,
       isTurningRight: false,
       isTurningLeft: false,
-      isAccelerating: true,
+      isAccelerating: false,
       isDecelerating: false,
     })
 
     useEffect(() => {
-      function infiniteLoop() {
-        console.log("started running loop")
-        setVehicle(v => moveVehicle(v))
-
-        setTimeout(infiniteLoop, 100);
-      }
-
-      infiniteLoop();
+      const interval = setInterval(() => {
+        setVehicle(v => moveVehicle(v));
+      }, 100);
+  
+      return () => clearInterval(interval); // Cleanup interval on unmount
     }, []);
+    
 
     const updateVehicle = (
         id: number,
@@ -47,6 +46,10 @@ export default function GameServerContextProvider({ children }: { children: Reac
             case "moveForward":
               setVehicle(v => ({...v, isMovingForward : true}))
               break;
+
+            case "moveBackward":
+              setVehicle(v => ({...v, isMovingBackward : true}))
+              break;
             
             case "turnLeft":
               setVehicle(v => ({...v, isTurningLeft : true}))
@@ -58,6 +61,10 @@ export default function GameServerContextProvider({ children }: { children: Reac
             
             case "stopForwards":
               setVehicle(v => ({...v, isMovingForward : false}))
+              break;
+
+            case "stopBackwards":
+              setVehicle(v => ({...v, isMovingBackward: false}))
               break;
 
             case "stopLeft":

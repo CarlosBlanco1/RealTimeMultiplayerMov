@@ -4,6 +4,7 @@ export default interface IPlayerVehicle {
     yPosition : number,
     Angle : number,
     isMovingForward : Boolean,
+    isMovingBackward : Boolean,
     isTurningRight : Boolean,
     isTurningLeft : Boolean,
     isAccelerating : Boolean,

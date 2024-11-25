@@ -13,6 +13,7 @@ export const vehicleContext = createContext<VehicleContextInterface>({
         yPosition: 0,
         Angle: 0,
         isMovingForward: false,
+        isMovingBackward: false,
         isTurningRight: false,
         isTurningLeft: false,
         isAccelerating: false,

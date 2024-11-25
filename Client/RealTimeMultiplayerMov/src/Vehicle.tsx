@@ -1,27 +1,32 @@
-import { useState } from "react";
-import CarIcon from "./CarIcon";
+import React, { useEffect, useState } from "react";
+import CarIcon from "./CarIcon"; // Assuming this is your car icon
+import { useVehicleContext } from "./useGameServerContext";
 
 export default function Vehicle() {
+  const context = useVehicleContext();
+
   const [rotation, setRotation] = useState(0);
-  const [viewBox, setViewBox] = useState(0);
-  const [xPosition, setXPostion] = useState(0);
+  const [xPosition, setXPosition] = useState(0);
   const [yPosition, setYPosition] = useState(0);
-  //Get coordinates from the context
-  
+
+  useEffect(() => {
+    setRotation(context.vehicle.Angle);
+    setXPosition(context.vehicle.xPosition);
+    setYPosition(context.vehicle.yPosition);
+  }, [context.vehicle]);
+
   return (
     <div
+      className="vehicle"
       style={{
-        position: "fixed",
-        rotate: `${rotation}deg`,
-        fill: "#999999",
-        width: `${viewBox}px`,
-        height: `${viewBox}px`,
-        top: `${xPosition}px`,
-        left: `${yPosition}px`,
+        position: "absolute",
+        top: `${yPosition}px`,
+        left: `${xPosition}px`,
+        transform: `rotate(${rotation}deg)`,
       }}
     >
-      
       <CarIcon />
     </div>
   );
+  
 }

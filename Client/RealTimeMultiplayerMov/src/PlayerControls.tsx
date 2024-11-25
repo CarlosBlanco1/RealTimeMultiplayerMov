@@ -12,6 +12,7 @@ export default function PlayerControls() {
             case 'w':
                 gameContext.updateVehicle(1, "moveForward")
                 break;
+                
             case 's':
                 gameContext.updateVehicle(1, "moveBackward")
                 break;
@@ -64,5 +65,5 @@ export default function PlayerControls() {
         };
       }, []);
       ``
-      
+      return null;
 }
