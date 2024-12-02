@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import CarIcon from "./CarIcon"; // Assuming this is your car icon
 import { useVehicleContext } from "./useGameServerContext";
 
-export default function Vehicle() {
+export default function Vehicle({ id }: { id: number }) {
   const context = useVehicleContext();
+
+  const vehicle = context.vehicles.find((v) => v.id == id);
 
   const [rotation, setRotation] = useState(0);
   const [xPosition, setXPosition] = useState(0);
   const [yPosition, setYPosition] = useState(0);
 
   useEffect(() => {
-    setRotation(context.vehicle.Angle);
-    setXPosition(context.vehicle.xPosition);
-    setYPosition(context.vehicle.yPosition);
-  }, [context.vehicle]);
+    if (vehicle) {
+      setRotation(vehicle.Angle);
+      setXPosition(vehicle.xPosition);
+      setYPosition(vehicle.yPosition);
+    }
+  }, [vehicle]);
 
   return (
     <div
@@ -28,5 +32,4 @@ export default function Vehicle() {
       <CarIcon />
     </div>
   );
-  
 }

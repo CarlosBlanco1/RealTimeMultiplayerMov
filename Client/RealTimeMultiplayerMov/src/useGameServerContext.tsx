@@ -2,12 +2,14 @@ import { createContext, useContext } from "react";
 import IPlayerVehicle from "./IPlayerVehicle";
 
 export interface VehicleContextInterface {
-    vehicle: IPlayerVehicle;
+    vehicles: IPlayerVehicle[];
+    setVehicles : React.Dispatch<React.SetStateAction<IPlayerVehicle[]>>;
     updateVehicle: (id: number, vehicleAction: "moveForward" | "moveBackward" | "turnLeft" | "turnRight" | "stopForwards" | "stopBackwards" | "stopLeft" | "stopRight") => void;
+    addNewVehicle: () => number;
 }
 
 export const vehicleContext = createContext<VehicleContextInterface>({
-    vehicle: {
+    vehicles: [{
         id: 0,
         xPosition: 0,
         yPosition: 0,
@@ -18,8 +20,10 @@ export const vehicleContext = createContext<VehicleContextInterface>({
         isTurningLeft: false,
         isAccelerating: false,
         isDecelerating: false
-    },
-    updateVehicle: () => {}
+    }],
+    setVehicles: () => {},
+    updateVehicle: () => {},
+    addNewVehicle: () => {return 1}
 })
 
 

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useVehicleContext } from "./useGameServerContext";
 
-export default function PlayerControls() {
+export default function PlayerControls({upKey, downKey, leftKey, rightKey, id} : {upKey: string, downKey: string, leftKey: string, rightKey: string, id: number}) {
 
     const gameContext = useVehicleContext();
 
@@ -9,20 +9,20 @@ export default function PlayerControls() {
         const handleKeyDown = (event: KeyboardEvent) => {
           console.log(`Key down: ${event.key}`);
           switch (event.key) {
-            case 'w':
-                gameContext.updateVehicle(1, "moveForward")
-                break;
-                
-            case 's':
-                gameContext.updateVehicle(1, "moveBackward")
+            case upKey:
+                gameContext.updateVehicle(id, "moveForward")
                 break;
 
-            case 'a':
-                gameContext.updateVehicle(1, "turnLeft")
+            case downKey:
+                gameContext.updateVehicle(id, "moveBackward")
                 break;
 
-            case 'd':
-                gameContext.updateVehicle(1, "turnRight")
+            case leftKey:
+                gameContext.updateVehicle(id, "turnLeft")
+                break;
+
+            case rightKey:
+                gameContext.updateVehicle(id, "turnRight")
                 break;
           
             default:
@@ -34,20 +34,20 @@ export default function PlayerControls() {
           console.log(`Key up: ${event.key}`);
 
           switch (event.key) {
-            case 'w':
-                gameContext.updateVehicle(1, "stopForwards")
+            case upKey:
+                gameContext.updateVehicle(id, "stopForwards")
                 break;
 
-            case 's':
-                gameContext.updateVehicle(1, "stopBackwards")
+            case downKey:
+                gameContext.updateVehicle(id, "stopBackwards")
                 break;
 
-            case 'a':
-                gameContext.updateVehicle(1, "stopLeft") 
+            case leftKey:
+                gameContext.updateVehicle(id, "stopLeft") 
                 break;
 
-            case 'd':
-                gameContext.updateVehicle(1, "stopRight") 
+            case rightKey:
+                gameContext.updateVehicle(id, "stopRight") 
                 break;
           
             default:

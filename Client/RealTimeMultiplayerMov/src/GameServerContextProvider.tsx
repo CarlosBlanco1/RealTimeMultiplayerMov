@@ -3,11 +3,47 @@ import IPlayerVehicle from "./IPlayerVehicle";
 import { vehicleContext } from "./useGameServerContext";
 import moveVehicle from "./vehicleUtils";
 
-export default function GameServerContextProvider({ children }: { children: React.ReactNode }) {
-    
+export default function GameServerContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
 
-    const [vehicle, setVehicle] = useState<IPlayerVehicle>({
-      id: 1,
+  const [vehicles, setVehicles] = useState<IPlayerVehicle[]>([]);
+
+  useEffect(() => {
+    const addVehiclesWithDelay = async () => {
+      console.log("this add vehcilce got called");
+  
+      const car1Id = await addNewVehicle();
+      console.log(car1Id);
+  
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second
+  
+      const car2Id = await addNewVehicle();
+      console.log(car2Id);
+    };
+  
+    addVehiclesWithDelay();
+    console.log(vehicles)
+  }, []);
+  
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVehicles((oldVehicles) =>
+        oldVehicles.map((vehicle) => moveVehicle(vehicle))
+      );
+    }, 100);
+
+    //TWO TYPES OF MESSAGES, I WANT TO MOVE THE VEHICLE MESSAGE, AND CURRENT STATE MESSAGE
+    return () => clearInterval(interval);
+  }, []);
+
+  const addNewVehicle = () => {
+    console.log("this add vehcile")
+    const newVehicle = {
+      id: Date.now(),
       xPosition: 0,
       yPosition: 0,
       Angle: 0,
@@ -17,79 +53,107 @@ export default function GameServerContextProvider({ children }: { children: Reac
       isTurningLeft: false,
       isAccelerating: false,
       isDecelerating: false,
-    })
+    };
 
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setVehicle(v => moveVehicle(v));
-      }, 100);
-  
-      return () => clearInterval(interval); // Cleanup interval on unmount
-    }, []);
-    
+    setVehicles((v) => [...v, newVehicle]);
+    console.log(vehicles)
+    return newVehicle.id;
+  };
 
-    const updateVehicle = (
-        id: number,
-        vehicleAction:
-           | "moveForward"    // 'w' pressed
-           | "moveBackward"   // 's' pressed
-           | "turnLeft"       // 'a' pressed
-           | "turnRight"      // 'd' pressed
-           | "stopForwards"   // when user lets go of 'w' key
-           | "stopBackwards"  // when user lets go of 's' key
-           | "stopLeft"       // when user lets go of 'a' key
-           | "stopRight"      // when user lets go of 'd' key
-     ) => {
+  const updateVehicle = (
+    id: number,
+    vehicleAction:
+      | "moveForward" // 'w' pressed
+      | "moveBackward" // 's' pressed
+      | "turnLeft" // 'a' pressed
+      | "turnRight" // 'd' pressed
+      | "stopForwards" // when user lets go of 'w' key
+      | "stopBackwards" // when user lets go of 's' key
+      | "stopLeft" // when user lets go of 'a' key
+      | "stopRight" // when user lets go of 'd' key
+  ) => {
+    switch (vehicleAction) {
+      case "moveForward":
+        setVehicles((oldVehicles) =>
+          oldVehicles.map((v) =>
+            v.id === id ? { ...v, isMovingForward: true } : v
+          )
+        );
+        break;
 
+      case "moveBackward":
+        setVehicles((oldVehicles) =>
+          oldVehicles.map((v) =>
+            v.id === id ? { ...v, isMovingBackward: true } : v
+          )
+        );
+        break;
 
-        switch (vehicleAction) {
-            case "moveForward":
-              setVehicle(v => ({...v, isMovingForward : true}))
-              break;
+      case "turnLeft":
+        setVehicles((oldVehicles) =>
+          oldVehicles.map((v) =>
+            v.id === id ? { ...v, isTurningLeft: true } : v
+          )
+        );
+        break;
 
-            case "moveBackward":
-              setVehicle(v => ({...v, isMovingBackward : true}))
-              break;
-            
-            case "turnLeft":
-              setVehicle(v => ({...v, isTurningLeft : true}))
-              break;
+      case "turnRight":
+        setVehicles((oldVehicles) =>
+          oldVehicles.map((v) =>
+            v.id === id ? { ...v, isTurningRight: true } : v
+          )
+        );
+        break;
 
-            case "turnRight":
-              setVehicle(v => ({...v, isTurningRight : true}))
-              break;
-            
-            case "stopForwards":
-              setVehicle(v => ({...v, isMovingForward : false}))
-              break;
+      case "stopForwards":
+        setVehicles((oldVehicles) =>
+          oldVehicles.map((v) =>
+            v.id === id ? { ...v, isMovingForward: false } : v
+          )
+        );
+        break;
 
-            case "stopBackwards":
-              setVehicle(v => ({...v, isMovingBackward: false}))
-              break;
+      case "stopBackwards":
+        setVehicles((oldVehicles) =>
+          oldVehicles.map((v) =>
+            v.id === id ? { ...v, isMovingBackward: false } : v
+          )
+        );
+        break;
 
-            case "stopLeft":
-              setVehicle(v => ({...v, isTurningLeft : false}))
-              break;
+      case "stopLeft":
+        setVehicles((oldVehicles) =>
+          oldVehicles.map((v) =>
+            v.id === id ? { ...v, isTurningLeft: false } : v
+          )
+        );
+        break;
 
-            case "stopRight":
-              setVehicle(v => ({...v, isTurningRight : false}))
-              break;      
-            
-            default:
-                throw "Invalid Vehicle Action";
-        }
-     }
+      case "stopRight":
+        setVehicles((oldVehicles) =>
+          oldVehicles.map((v) =>
+            v.id === id ? { ...v, isTurningRight: false } : v
+          )
+        );
+        break;
 
-     return (
-      <>
-        <vehicleContext.Provider
-          value={{
-            vehicle,
-            updateVehicle
-          }}
-        >
-          {children}
-        </vehicleContext.Provider>
-      </>
-    );
+      default:
+        throw "Invalid Vehicle Action";
+    }
+  };
+
+  return (
+    <>
+      <vehicleContext.Provider
+        value={{
+          vehicles,
+          setVehicles,
+          updateVehicle,
+          addNewVehicle
+        }}
+      >
+        {children}
+      </vehicleContext.Provider>
+    </>
+  );
 }
