@@ -3,6 +3,8 @@ import IPlayerVehicle from "./IPlayerVehicle";
 import { GameState } from "./App";
 import Vehicle from "./Vehicle";
 import PlayerControls from "./PlayerControls";
+import { movementRequest } from "./App";
+
 
 export default function GameClientContext() {
   const [vehicleId] = useState<number>(Date.now());
@@ -35,8 +37,16 @@ export default function GameClientContext() {
 
     newSocket.addEventListener("open", () => {
       console.log("Connection made");
+
       const initialVehicle = createInitialVehicle();
       setVehicles((prevVehicles) => [...prevVehicles, initialVehicle]);
+
+      const movementRequest: movementRequest = {
+        vehicleId: vehicleId,
+        action: "moveForward",
+      };
+
+      newSocket.send(JSON.stringify(movementRequest))
     });
 
     newSocket.addEventListener("message", (event) => {
@@ -54,6 +64,9 @@ export default function GameClientContext() {
         state: messageData.state as IPlayerVehicle[],
       };
 
+      console.log("updating vehicles")
+      console.log(newState)
+
       ChangeState(newState);
     });
 
@@ -63,11 +76,12 @@ export default function GameClientContext() {
     };
   }, [vehicleId]);
 
+  console.log(vehicles)
   return (
     <>
       {vehicles.map((v) => (
         <div key={v.id}>
-          <Vehicle id={v.id} />
+          <Vehicle vehicle={v} />
           {v.id === vehicleId && socket &&(
             <PlayerControls
               upKey="w"

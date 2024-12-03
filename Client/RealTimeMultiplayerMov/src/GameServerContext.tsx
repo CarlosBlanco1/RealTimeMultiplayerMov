@@ -16,6 +16,7 @@ export default function GameServerContext() {
 
     newSocket.addEventListener("message", (event) => {
       console.log("revieved event", event.data);
+      console.log("number of vehicles is:" + gameContext.vehicles.length)
 
       const messageData = JSON.parse(event.data)
 
@@ -34,11 +35,8 @@ export default function GameServerContext() {
       if(!gameContext.vehicles.find(v => v.id == newMovementRequest.vehicleId))
       {
         gameContext.addNewVehicle(newMovementRequest.vehicleId)
-        // THIS DOESNT ADD THE FREAKING VEHICLE CORRECTLY
+        console.log("added called")
       }
-
-      console.log("vehicles are:")
-      console.log(gameContext.vehicles)
 
       gameContext.updateVehicle(
         newMovementRequest.vehicleId,
@@ -53,17 +51,24 @@ export default function GameServerContext() {
           | "stopRight"
       );
 
-      //create and send new state after movement request
+    });
+  }, []);
 
-      const newState = {
+  useEffect(() => {
+
+    //create and send new state after movement request
+
+    const newState = {
         state: gameContext.vehicles,
       };
       
-      newSocket.send(JSON.stringify(newState))
+      socket && socket.send(JSON.stringify(newState))
       console.log("sent" + JSON.stringify(newState))
+      
+      console.log("vehicles are:")
+      console.log(gameContext.vehicles)
 
-    });
-  }, []);
+  }, [gameContext.vehicles])
 
   return (
     <>

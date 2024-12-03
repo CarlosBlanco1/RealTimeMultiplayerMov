@@ -24,6 +24,7 @@ export default function GameServerContextProvider({
   }, []);
 
   const addNewVehicle = (newVehicleId : number) => {
+
     const newVehicle = {
       id: newVehicleId,
       xPosition: 0,
@@ -39,7 +40,7 @@ export default function GameServerContextProvider({
 
     console.log("new vehicle is:" + JSON.stringify(newVehicle))
 
-    setVehicles((prevVehicles) => [...prevVehicles, newVehicle]);
+    setVehicles((prevVehicles) => prevVehicles.find(v => v.id == newVehicleId) ? prevVehicles : [...prevVehicles, newVehicle]);
     
   };
 

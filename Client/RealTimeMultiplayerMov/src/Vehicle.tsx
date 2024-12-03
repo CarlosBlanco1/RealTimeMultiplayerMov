@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CarIcon from "./CarIcon"; // Assuming this is your car icon
-import { useVehicleContext } from "./useGameServerContext";
+import IPlayerVehicle from "./IPlayerVehicle";
 
-export default function Vehicle({ id }: { id: number }) {
-  const context = useVehicleContext();
-
-  const vehicle = context.vehicles.find((v) => v.id == id);
+export default function Vehicle({ vehicle }: { vehicle : IPlayerVehicle }) {
 
   const [rotation, setRotation] = useState(0);
   const [xPosition, setXPosition] = useState(0);
