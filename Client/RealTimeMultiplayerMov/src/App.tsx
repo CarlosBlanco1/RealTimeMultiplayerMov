@@ -16,11 +16,11 @@ export type movementRequest = {
 function App() {
 
   const [isServer, setIsServer] = useState<Boolean | undefined>(undefined);
-  
+
   return (
     <>
     <div >
-      <div>What do you want to be?</div>
+      <div style={{color: 'black'}}>What do you want to be?</div>
       <div className="flex gap-5">
         <button onClick={() => setIsServer(true)}>
           Server
@@ -31,7 +31,7 @@ function App() {
 
         {
 
-          isServer == undefined ? <div className="text-black">Click a button</div> : isServer ? <GameClientContext/> : <GameServerContext/>
+          isServer == undefined ? <div style={{color: 'black'}}>Click a button</div> : isServer ? <GameServerContext></GameServerContext> : <GameClientContext></GameClientContext>
         }
 
       </div>

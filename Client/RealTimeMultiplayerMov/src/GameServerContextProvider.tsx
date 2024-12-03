@@ -10,23 +10,6 @@ export default function GameServerContextProvider({
 }) {
 
   const [vehicles, setVehicles] = useState<IPlayerVehicle[]>([]);
-
-  useEffect(() => {
-    const addVehiclesWithDelay = async () => {
-      console.log("this add vehcilce got called");
-  
-      const car1Id = await addNewVehicle();
-      console.log(car1Id);
-  
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second
-  
-      const car2Id = await addNewVehicle();
-      console.log(car2Id);
-    };
-  
-    addVehiclesWithDelay();
-    console.log(vehicles)
-  }, []);
   
 
   useEffect(() => {
@@ -40,10 +23,9 @@ export default function GameServerContextProvider({
     return () => clearInterval(interval);
   }, []);
 
-  const addNewVehicle = () => {
-    console.log("this add vehcile")
+  const addNewVehicle = (newVehicleId : number) => {
     const newVehicle = {
-      id: Date.now(),
+      id: newVehicleId,
       xPosition: 0,
       yPosition: 0,
       Angle: 0,
@@ -55,9 +37,10 @@ export default function GameServerContextProvider({
       isDecelerating: false,
     };
 
-    setVehicles((v) => [...v, newVehicle]);
-    console.log(vehicles)
-    return newVehicle.id;
+    console.log("new vehicle is:" + JSON.stringify(newVehicle))
+
+    setVehicles((prevVehicles) => [...prevVehicles, newVehicle]);
+    
   };
 
   const updateVehicle = (

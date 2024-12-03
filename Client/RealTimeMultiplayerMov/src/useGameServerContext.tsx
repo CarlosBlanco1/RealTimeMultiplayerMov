@@ -5,7 +5,7 @@ export interface VehicleContextInterface {
     vehicles: IPlayerVehicle[];
     setVehicles : React.Dispatch<React.SetStateAction<IPlayerVehicle[]>>;
     updateVehicle: (id: number, vehicleAction: "moveForward" | "moveBackward" | "turnLeft" | "turnRight" | "stopForwards" | "stopBackwards" | "stopLeft" | "stopRight") => void;
-    addNewVehicle: () => number;
+    addNewVehicle: (newVehicleId : number) => void;
 }
 
 export const vehicleContext = createContext<VehicleContextInterface>({
@@ -23,7 +23,7 @@ export const vehicleContext = createContext<VehicleContextInterface>({
     }],
     setVehicles: () => {},
     updateVehicle: () => {},
-    addNewVehicle: () => {return 1}
+    addNewVehicle: () => {}
 })
 
 
